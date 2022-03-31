@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import "./App.css";
 
 class PomodoroClock extends Component {
@@ -172,7 +172,7 @@ class PomodoroClock extends Component {
                 )}:${secondsLeft.padStart(2, "0")}`,
                 isTimerPlaying: true,
             });
-        }, 100);
+        }, 1000);
 
         this.setState({ pomoIntervalID: intervalID });
     }
@@ -183,6 +183,8 @@ class PomodoroClock extends Component {
         const pomoStatus = this.state.isPomoInSession;
         const timeLeft = this.state.timeLeft;
         const isPomoAboutToEnd = this.state.isPomoAboutToEnd;
+        const totalTime = this.state.passedTime + this.state.timer;
+        const passedTime = this.state.passedTime;
         return (
             <div className="App">
                 <h1>Pomodoro Clock</h1>
@@ -198,6 +200,8 @@ class PomodoroClock extends Component {
                     status={pomoStatus}
                     time={timeLeft}
                     isEnding={isPomoAboutToEnd}
+                    passedTime={passedTime}
+                    totalTime={totalTime}
                 />
                 <PomoControllers
                     play={this.playPomo}
@@ -286,10 +290,19 @@ function PomodoroSetting(props) {
 }
 
 function Timer(props) {
+    useEffect(() => {
+        const timerLoaderProgress = (props.passedTime * 100) / props.totalTime;
+        const timerLoader = document.querySelector(".timer-loader");
+        timerLoader.style.width = timerLoaderProgress + "%";
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.time]);
+
     return (
         <div
             className={`timer-wrapper ${props.isEnding ? "timer-to-end" : ""}`}
         >
+            <div className="timer-loader"></div>
             <p id="timer-label">{props.status ? "Session" : "Break"}</p>
             <div id="time-left">{props.time}</div>
         </div>
