@@ -13,6 +13,7 @@ class PomodoroClock extends Component {
             isTimerPlaying: false,
             pomoIntervalID: 0,
             passedTime: 0,
+            isPomoAboutToEnd: false,
         };
 
         this.beepAudio = React.createRef();
@@ -42,6 +43,7 @@ class PomodoroClock extends Component {
                     incrementedSessionTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
                 timer: incrementedSessionTime * 60,
+                isPomoAboutToEnd: false,
             };
         });
     }
@@ -57,6 +59,7 @@ class PomodoroClock extends Component {
                     decrementedSessionTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
                 timer: decrementedSessionTime * 60,
+                isPomoAboutToEnd: false,
             };
         });
     }
@@ -69,7 +72,11 @@ class PomodoroClock extends Component {
 
             return {
                 breakLength: incrementedBreakTime,
+                timeLeft:
+                    incrementedBreakTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
+                timer: incrementedBreakTime * 60,
+                isPomoAboutToEnd: false,
             };
         });
     }
@@ -81,7 +88,11 @@ class PomodoroClock extends Component {
 
             return {
                 breakLength: decrementedBreakTime,
+                timeLeft:
+                    decrementedBreakTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
+                timer: decrementedBreakTime * 60,
+                isPomoAboutToEnd: false,
             };
         });
     }
@@ -98,6 +109,7 @@ class PomodoroClock extends Component {
             passedTime: 0,
             isTimerPlaying: false,
             isPomoInSession: true,
+            isPomoAboutToEnd: false,
         });
     }
 
@@ -120,6 +132,12 @@ class PomodoroClock extends Component {
 
             let timer = this.state.timer;
             let timeLeft = timer / 60;
+
+            if (timer <= 61) {
+                this.setState({ isPomoAboutToEnd: true });
+            } else {
+                this.setState({ isPomoAboutToEnd: false });
+            }
 
             if (timer === 0) {
                 this.playAudio();
@@ -154,7 +172,7 @@ class PomodoroClock extends Component {
                 )}:${secondsLeft.padStart(2, "0")}`,
                 isTimerPlaying: true,
             });
-        }, 1000);
+        }, 100);
 
         this.setState({ pomoIntervalID: intervalID });
     }
@@ -164,6 +182,7 @@ class PomodoroClock extends Component {
         const breakLength = this.state.breakLength;
         const pomoStatus = this.state.isPomoInSession;
         const timeLeft = this.state.timeLeft;
+        const isPomoAboutToEnd = this.state.isPomoAboutToEnd;
         return (
             <div className="App">
                 <h1>Pomodoro Clock</h1>
@@ -175,7 +194,11 @@ class PomodoroClock extends Component {
                     incrementBreak={this.incrementBreakLength}
                     decrementBreak={this.decrementBreakLength}
                 />
-                <Timer status={pomoStatus} time={timeLeft} />
+                <Timer
+                    status={pomoStatus}
+                    time={timeLeft}
+                    isEnding={isPomoAboutToEnd}
+                />
                 <PomoControllers
                     play={this.playPomo}
                     reset={this.resetPomoValues}
@@ -263,17 +286,10 @@ function PomodoroSetting(props) {
 }
 
 function Timer(props) {
-    // function isPomoAboutToEnd() {
-    //     const timerWrapper = document.querySelector("timer-wrapper");
-    //     if (props.isEnding) {
-    //         timerWrapper.classList.add("timer-to-end");
-    //         return;
-    //     }
-    //     timerWrapper.classList.remove("timer-to-end");
-    // }
-
     return (
-        <div className="timer-wrapper">
+        <div
+            className={`timer-wrapper ${props.isEnding ? "timer-to-end" : ""}`}
+        >
             <p id="timer-label">{props.status ? "Session" : "Break"}</p>
             <div id="time-left">{props.time}</div>
         </div>
