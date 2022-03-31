@@ -26,7 +26,7 @@ button:hover {
 .pomodoro-settings {
   display: flex;
   justify-content: center;
-  width: 448px;
+  width: 650px;
   margin: 0 auto;
   gap: 2em;
 }
@@ -36,7 +36,7 @@ button:hover {
 .pomodoro-settings .setting-wrapper p {
   font-size: 1.5em;
 }
-.pomodoro-settings .setting-wrapper:last-child {
+.pomodoro-settings .setting-wrapper:nth-child(2) {
   order: -1;
 }
 .pomodoro-settings .setting-button {
@@ -137,7 +137,7 @@ button:hover {
   border-color: #9a031e;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 650px) {
   .pomodoro-settings {
     flex-direction: column;
     width: 100%;

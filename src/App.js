@@ -14,16 +14,25 @@ class PomodoroClock extends Component {
             pomoIntervalID: 0,
             passedTime: 0,
             isPomoAboutToEnd: false,
+            numberOfPomos: 0,
+            pomosCounter: 0,
         };
 
         this.beepAudio = React.createRef();
 
         this.incrementSessionLength = this.incrementSessionLength.bind(this);
         this.decrementSessionLength = this.decrementSessionLength.bind(this);
+
         this.incrementBreakLength = this.incrementBreakLength.bind(this);
         this.decrementBreakLength = this.decrementBreakLength.bind(this);
+
+        this.incrementPomosNumber = this.incrementPomosNumber.bind(this);
+        this.decrementPomosNumber = this.decrementPomosNumber.bind(this);
+
         this.resetPomoValues = this.resetPomoValues.bind(this);
+
         this.playPomo = this.playPomo.bind(this);
+
         this.playAudio = this.playAudio.bind(this);
     }
 
@@ -96,6 +105,30 @@ class PomodoroClock extends Component {
             };
         });
     }
+    incrementPomosNumber() {
+        this.setState((state, props) => {
+            if (state.isTimerPlaying || state.numberOfPomos + 1 > 25) return;
+
+            const incrementedNumberOfPomos = state.numberOfPomos + 1;
+
+            return {
+                numberOfPomos: incrementedNumberOfPomos,
+                pomosCounter: 0,
+            };
+        });
+    }
+    decrementPomosNumber() {
+        this.setState((state, props) => {
+            if (state.isTimerPlaying || state.numberOfPomos - 1 < 0) return;
+
+            const decrementedNumberOfPomos = state.numberOfPomos - 1;
+
+            return {
+                numberOfPomos: decrementedNumberOfPomos,
+                pomosCounter: 0,
+            };
+        });
+    }
 
     resetPomoValues() {
         clearInterval(this.state.pomoIntervalID);
@@ -110,6 +143,7 @@ class PomodoroClock extends Component {
             isTimerPlaying: false,
             isPomoInSession: true,
             isPomoAboutToEnd: false,
+            pomosCounter: 0,
         });
     }
 
@@ -148,11 +182,29 @@ class PomodoroClock extends Component {
                     newTimer = this.state.sessionLength * 60 + 1;
                 }
 
-                this.setState((state, props) => ({
-                    isPomoInSession: !state.isPomoInSession,
-                    timer: newTimer,
-                    passedTime: 0,
-                }));
+                this.setState((state, props) => {
+                    const stateObj = {
+                        isPomoInSession: !state.isPomoInSession,
+                        timer: newTimer,
+                        passedTime: 0,
+                    };
+
+                    if (!state.isPomoInSession) {
+                        stateObj.pomosCounter = state.pomosCounter + 1;
+                    }
+
+                    return stateObj;
+                });
+
+                if (this.state.numberOfPomos !== 0) {
+                    if (
+                        this.state.isPomoInSession &&
+                        this.state.pomosCounter === this.state.numberOfPomos
+                    ) {
+                        this.resetPomoValues();
+                        return;
+                    }
+                }
             }
 
             let [minutesLeft, secondsLeft] = timeLeft.toString().split(".");
@@ -185,16 +237,22 @@ class PomodoroClock extends Component {
         const isPomoAboutToEnd = this.state.isPomoAboutToEnd;
         const totalTime = this.state.passedTime + this.state.timer;
         const passedTime = this.state.passedTime;
+        const numberOfPomos = this.state.numberOfPomos;
+        // const pomosCounter = this.state.pomosCounter;
+
         return (
             <div className="App">
                 <h1>Pomodoro Clock</h1>
                 <PomodoroSetting
                     session={sessionLength}
                     break={breakLength}
+                    pomos={numberOfPomos}
                     incrementSession={this.incrementSessionLength}
                     decrementSession={this.decrementSessionLength}
                     incrementBreak={this.incrementBreakLength}
                     decrementBreak={this.decrementBreakLength}
+                    incrementPomos={this.incrementPomosNumber}
+                    decrementPomos={this.decrementPomosNumber}
                 />
                 <Timer
                     status={pomoStatus}
@@ -278,6 +336,33 @@ function PomodoroSetting(props) {
                         id="session-increment"
                         title="increment session time"
                         onClick={props.incrementSession}
+                        onMouseLeave={addIncrementAnimation}
+                        onMouseEnter={addIncrementAnimation}
+                    >
+                        <i className="fa fa-arrow-up" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div className="setting-wrapper">
+                <p id="pomos-number-label">Number of Pomos</p>
+                <div className="setting-button">
+                    <button
+                        id="pomos-number-decrement"
+                        title="decrement number of pomos"
+                        onClick={props.decrementPomos}
+                        className="decrement-btn"
+                        onMouseLeave={addDecrementAnimation}
+                        onMouseEnter={addDecrementAnimation}
+                    >
+                        <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                    </button>
+                    <div id="pomos-number" className="setting-length">
+                        {props.pomos}
+                    </div>
+                    <button
+                        id="pomos-number-increment"
+                        title="increment number of pomos"
+                        onClick={props.incrementPomos}
                         onMouseLeave={addIncrementAnimation}
                         onMouseEnter={addIncrementAnimation}
                     >
