@@ -297,13 +297,26 @@ function Timer(props) {
 }
 
 function PomoControllers(props) {
+    function addResetAnimation(e) {
+        if (e.type === "mouseenter") {
+            e.target.classList.add("reset-animation");
+            return;
+        }
+        e.target.classList.remove("reset-animation");
+    }
+
     return (
         <div className="controllers-wrapper">
             <button id="start_stop" onClick={props.play}>
                 <i className="fa fa-play" aria-hidden="true"></i>
                 <i className="fa fa-pause" aria-hidden="true"></i>
             </button>
-            <button id="reset" onClick={props.reset}>
+            <button
+                id="reset"
+                onClick={props.reset}
+                onMouseLeave={addResetAnimation}
+                onMouseEnter={addResetAnimation}
+            >
                 <i className="fa fa-refresh" aria-hidden="true"></i>
             </button>
         </div>
