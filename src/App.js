@@ -187,51 +187,93 @@ class PomodoroClock extends Component {
 }
 
 function PomodoroSetting(props) {
+    function addIncrementAnimation(e) {
+        if (e.type === "mouseenter") {
+            e.target.classList.add("increment-btn-animation");
+            return;
+        }
+        e.target.classList.remove("increment-btn-animation");
+    }
+    function addDecrementAnimation(e) {
+        if (e.type === "mouseenter") {
+            e.target.classList.add("decrement-btn-animation");
+            return;
+        }
+        e.target.classList.remove("decrement-btn-animation");
+    }
+
     return (
         <div className="pomodoro-settings">
-            <div>
+            <div className="setting-wrapper">
                 <p id="break-label">Break Length</p>
-                <button
-                    id="break-decrement"
-                    title="decrement break time"
-                    onClick={props.decrementBreak}
-                >
-                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
-                </button>
-                <div id="break-length">{props.break}</div>
-                <button
-                    id="break-increment"
-                    title="increment break time"
-                    onClick={props.incrementBreak}
-                >
-                    <i className="fa fa-arrow-up" aria-hidden="true"></i>
-                </button>
+                <div className="setting-button">
+                    <button
+                        id="break-decrement"
+                        title="decrement break time"
+                        onClick={props.decrementBreak}
+                        className="decrement-btn"
+                        onMouseLeave={addDecrementAnimation}
+                        onMouseEnter={addDecrementAnimation}
+                    >
+                        <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                    </button>
+                    <div id="break-length" className="setting-length">
+                        {props.break}
+                    </div>
+                    <button
+                        id="break-increment"
+                        title="increment break time"
+                        onClick={props.incrementBreak}
+                        onMouseLeave={addIncrementAnimation}
+                        onMouseEnter={addIncrementAnimation}
+                    >
+                        <i className="fa fa-arrow-up" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
-            <div>
+            <div className="setting-wrapper">
                 <p id="session-label">Session Length</p>
-                <button
-                    id="session-decrement"
-                    title="decrement session time"
-                    onClick={props.decrementSession}
-                >
-                    <i className="fa fa-arrow-down" aria-hidden="true"></i>
-                </button>
-                <div id="session-length">{props.session}</div>
-                <button
-                    id="session-increment"
-                    title="increment session time"
-                    onClick={props.incrementSession}
-                >
-                    <i className="fa fa-arrow-up" aria-hidden="true"></i>
-                </button>
+                <div className="setting-button">
+                    <button
+                        id="session-decrement"
+                        title="decrement session time"
+                        onClick={props.decrementSession}
+                        className="decrement-btn"
+                        onMouseLeave={addDecrementAnimation}
+                        onMouseEnter={addDecrementAnimation}
+                    >
+                        <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                    </button>
+                    <div id="session-length" className="setting-length">
+                        {props.session}
+                    </div>
+                    <button
+                        id="session-increment"
+                        title="increment session time"
+                        onClick={props.incrementSession}
+                        onMouseLeave={addIncrementAnimation}
+                        onMouseEnter={addIncrementAnimation}
+                    >
+                        <i className="fa fa-arrow-up" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
         </div>
     );
 }
 
 function Timer(props) {
+    // function isPomoAboutToEnd() {
+    //     const timerWrapper = document.querySelector("timer-wrapper");
+    //     if (props.isEnding) {
+    //         timerWrapper.classList.add("timer-to-end");
+    //         return;
+    //     }
+    //     timerWrapper.classList.remove("timer-to-end");
+    // }
+
     return (
-        <div>
+        <div className="timer-wrapper">
             <p id="timer-label">{props.status ? "Session" : "Break"}</p>
             <div id="time-left">{props.time}</div>
         </div>
@@ -240,7 +282,7 @@ function Timer(props) {
 
 function PomoControllers(props) {
     return (
-        <div>
+        <div className="controllers-wrapper">
             <button id="start_stop" onClick={props.play}>
                 <i className="fa fa-play" aria-hidden="true"></i>
                 <i className="fa fa-pause" aria-hidden="true"></i>
