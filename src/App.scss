@@ -16,6 +16,17 @@ button {
     }
 }
 
+.author {
+    a {
+        color: #313E50;
+        text-decoration: none;
+        
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
 .timer-loader {
     background-color: #313E50;
     position: absolute;

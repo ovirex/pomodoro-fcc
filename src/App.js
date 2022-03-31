@@ -266,6 +266,15 @@ class PomodoroClock extends Component {
                     reset={this.resetPomoValues}
                 />
                 <PomoAudio ref={this.beepAudio} play={this.playAudio} />
+                <div className="author">
+                    <p>
+                        Designed and developed <br />
+                        by{" "}
+                        <a href="https://ovidio.welikeperas.com/">
+                            <strong>Ovidio Pérez</strong>
+                        </a>
+                    </p>
+                </div>
             </div>
         );
     }

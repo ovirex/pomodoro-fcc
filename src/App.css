@@ -14,6 +14,14 @@ button:hover {
   transform: scale(0.9);
 }
 
+.author a {
+  color: #313E50;
+  text-decoration: none;
+}
+.author a:hover {
+  text-decoration: underline;
+}
+
 .timer-loader {
   background-color: #313E50;
   position: absolute;
