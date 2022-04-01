@@ -46,14 +46,19 @@ class PomodoroClock extends Component {
 
             const incrementedSessionTime = state.sessionLength + 1;
 
-            return {
+            const stateObj = {
                 sessionLength: incrementedSessionTime,
-                timeLeft:
-                    incrementedSessionTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
-                timer: incrementedSessionTime * 60,
                 isPomoAboutToEnd: false,
             };
+
+            if (state.isPomoInSession) {
+                stateObj.timeLeft =
+                    incrementedSessionTime.toString().padStart(2, "0") + ":00";
+                stateObj.timer = incrementedSessionTime * 60;
+            }
+
+            return stateObj;
         });
     }
     decrementSessionLength() {
@@ -62,14 +67,19 @@ class PomodoroClock extends Component {
 
             const decrementedSessionTime = state.sessionLength - 1;
 
-            return {
+            const stateObj = {
                 sessionLength: decrementedSessionTime,
-                timeLeft:
-                    decrementedSessionTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
-                timer: decrementedSessionTime * 60,
                 isPomoAboutToEnd: false,
             };
+
+            if (state.isPomoInSession) {
+                stateObj.timeLeft =
+                    decrementedSessionTime.toString().padStart(2, "0") + ":00";
+                stateObj.timer = decrementedSessionTime * 60;
+            }
+
+            return stateObj;
         });
     }
 
@@ -79,14 +89,19 @@ class PomodoroClock extends Component {
 
             const incrementedBreakTime = state.breakLength + 1;
 
-            return {
+            const stateObj = {
                 breakLength: incrementedBreakTime,
-                timeLeft:
-                    incrementedBreakTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
-                timer: incrementedBreakTime * 60,
                 isPomoAboutToEnd: false,
             };
+
+            if (!state.isPomoInSession) {
+                stateObj.timeLeft =
+                    incrementedBreakTime.toString().padStart(2, "0") + ":00";
+                stateObj.timer = incrementedBreakTime * 60;
+            }
+
+            return stateObj;
         });
     }
     decrementBreakLength() {
@@ -95,14 +110,19 @@ class PomodoroClock extends Component {
 
             const decrementedBreakTime = state.breakLength - 1;
 
-            return {
+            const stateObj = {
                 breakLength: decrementedBreakTime,
-                timeLeft:
-                    decrementedBreakTime.toString().padStart(2, "0") + ":00",
                 passedTime: 0,
-                timer: decrementedBreakTime * 60,
                 isPomoAboutToEnd: false,
             };
+
+            if (!state.isPomoInSession) {
+                stateObj.timeLeft =
+                    decrementedBreakTime.toString().padStart(2, "0") + ":00";
+                stateObj.timer = decrementedBreakTime * 60;
+            }
+
+            return stateObj;
         });
     }
     incrementPomosNumber() {
