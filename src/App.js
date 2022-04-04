@@ -259,7 +259,7 @@ class PomodoroClock extends Component {
         const passedTime = this.state.passedTime;
         const timerLoaderWidth = (passedTime * 100) / totalTime;
         const numberOfPomos = this.state.numberOfPomos;
-        // const pomosCounter = this.state.pomosCounter;
+        const pomosCounter = this.state.pomosCounter;
 
         return (
             <div className="App">
@@ -280,6 +280,7 @@ class PomodoroClock extends Component {
                     time={timeLeft}
                     isEnding={isPomoAboutToEnd}
                     loaderWidth={timerLoaderWidth}
+                    pomoCounter={pomosCounter}
                 />
                 <PomoControllers
                     play={this.playPomo}
@@ -414,6 +415,9 @@ function Timer(props) {
             ></div>
             <p id="timer-label">{props.status ? "Session" : "Break"}</p>
             <div id="time-left">{props.time}</div>
+            <p id="pomo-counter">
+                Current Pomo: <span>{props.pomoCounter + 1}</span>
+            </p>
         </div>
     );
 }

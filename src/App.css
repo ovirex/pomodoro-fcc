@@ -151,5 +151,12 @@ button:hover {
     width: 100%;
   }
 }
+#pomo-counter {
+  font-size: 0.6em;
+  margin-block: 0.6em;
+}
+#pomo-counter span {
+  text-decoration: underline;
+}
 
 /*# sourceMappingURL=App.css.map */
